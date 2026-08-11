@@ -1,8 +1,3 @@
-import React, { useState, useEffect } from "react";
-import NewPlantForm from "./NewPlantForm";
-import PlantList from "./PlantList";
-import Search from "./Search";
-
 function PlantPage() {
   const [plants, setPlants] = useState([]);
 
@@ -12,13 +7,15 @@ function PlantPage() {
       .then((data) => setPlants(data));
   }, []);
 
+  function handleNewPlant(newPlant) {
+    setPlants((prevPlants) => [...prevPlants, newPlant]);
+  }
+
   return (
     <main>
-      <NewPlantForm />
+      <NewPlantForm onAddPlant={handleNewPlant} />
       <Search />
       <PlantList plants={plants} />
     </main>
   );
 }
-
-export default PlantPage;
