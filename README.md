@@ -1,93 +1,103 @@
-# Phase 2 Code Challenge: Plantsy
+# Personal Project Showcase App
 
-## Demo
+A responsive, single-page React application that lets a freelance developer, designer, or creative agency showcase their past work. Visitors can browse projects, search/filter them live, view full details on a dedicated page, and the owner can dynamically add new projects — including an uploaded image — right from the browser.
 
-Use this gif as an example of how the app should work.
+Built as a summative lab project demonstrating core React concepts: component hierarchy, state management, event handling, controlled forms, and client-side routing.
 
-![Demo GIF](./demo.gif)
+## Features
 
-## Instructions
+- **Landing page** displaying a list of projects (title, description, thumbnail image)
+- **Add Project form** — dynamically add new projects with a title, description, and an uploaded image
+- **Live search** — filters the project list as you type, with an empty-state message when nothing matches
+- **Project detail view** — click any project card to navigate to its own page via client-side routing
+- **Persistent data** — added projects are saved to `localStorage`, so they survive a page refresh
+- **Responsive design** — layout adapts down to mobile-width screens, inspired by the provided mock-up
 
-Welcome to Plantsy! You've been tasked with building out some features for the
-admin side of a plant store. The designers have put together the components and
-CSS. Now it's up to you to bring the features to life by adding stateful logic
-as well as persisting data to the backend via our API.
+## Tech Stack
 
-Your job will be to make our app work according to the user stories you will
-find the [Deliverables](#Deliverables) section.
+- [React](https://react.dev/) (functional components + hooks)
+- [Vite](https://vite.dev/) — build tool and dev server
+- [React Router](https://reactrouter.com/) — client-side routing
+- Plain CSS (no framework)
 
-## Setup
+## Project Structure
 
-1. Run `npm install` in your terminal.
-2. Run `npm run server`. This will run your backend on port `6001`.
-3. In a new terminal, run `npm run dev`.
-
-Make sure to open [http://localhost:6001/plants](http://localhost:6001/plants)
-in the browser to verify that your backend is working before you proceed!
-
-## Endpoints
-
-The base URL for your backend is: `http://localhost:6001`
-
-## Deliverables
-
-As a user:
-
-1. When the app starts, I can see all plants.
-2. I can add a new plant to the page by submitting the form.
-3. I can mark a plant as "sold out".
-4. I can search for plants by their name and see a filtered list of plants.
-
-### Endpoints for Core Deliverables
-
-#### GET /plants
-
-Example Response:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Aloe",
-    "image": "./images/aloe.jpg",
-    "price": 15.99
-  },
-  {
-    "id": 2,
-    "name": "ZZ Plant",
-    "image": "./images/zz-plant.jpg",
-    "price": 25.98
-  }
-]
+```
+src/
+├── main.jsx                    # App entry point, wraps App in BrowserRouter
+├── App.jsx                     # Owns shared state (projects, search term), defines routes
+├── App.css                     # All app styling
+├── data/
+│   └── projects.js             # Starter/sample project data
+└── components/
+    ├── Header.jsx               # App title/banner
+    ├── ProjectForm.jsx          # Controlled form to add a new project (incl. image upload)
+    ├── SearchBar.jsx            # Controlled search input
+    ├── ProjectList.jsx          # Renders the (filtered) list of ProjectCards
+    ├── ProjectCard.jsx          # Single project preview, links to its detail page
+    └── ProjectDetail.jsx        # Full detail view for one project, read via URL param
 ```
 
-#### POST `/plants`
+## Component Hierarchy
 
-Required Headers:
-
-```js
-{
-  "Content-Type": "application/json"
-}
+```
+App (owns: projects, searchTerm)
+ ├── Header
+ └── Routes
+      ├── "/"              → ProjectForm, SearchBar, ProjectList → ProjectCard (×n)
+      └── "/project/:id"   → ProjectDetail
 ```
 
-Request Object:
+State is lifted up to `App` and passed down as props; child components communicate changes back up via callback functions (`onAddProject`, `onSearchChange`) — a standard "state down, events up" React data flow.
 
-```json
-{
-  "name": "string",
-  "image": "string",
-  "price": number
-}
+## Getting Started
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v18+) and npm installed
+
+### Installation
+
+```bash
+git clone <your-repo-url>
+cd project-showcase
+npm install
 ```
 
-Example Response:
+### Run the development server
 
-```json
-{
-  "id": 1,
-  "name": "Aloe",
-  "image": "./images/aloe.jpg",
-  "price": 15.99
-}
+```bash
+npm run dev
 ```
+
+Then open the URL printed in the terminal (typically `http://localhost:5173`).
+
+### Build for production
+
+```bash
+npm run build
+```
+
+Output is generated in the `dist/` folder.
+
+## Usage
+
+- **Browse projects** on the landing page.
+- **Search** using the search bar — the list filters live as you type.
+- **View details** by clicking any project card.
+- **Add a project** by filling out the Title, Description, and optionally uploading an Image, then clicking Add. The new project appears immediately in the list and persists across page refreshes.
+
+## Known Limitations
+
+- Uploaded images are stored as base64 data URLs in `localStorage`, which has a ~5MB storage limit — fine for a handful of small images, but not meant for large media libraries.
+- There is no backend/database — all data lives in the browser's `localStorage`, scoped to a single browser/device.
+
+## Future Improvements
+
+- Edit/delete existing projects
+- Backend API + database for multi-device persistence
+- Tags/categories and filter-by-tag
+- Automated tests with Jest and React Testing Library
+
+## Author
+
+EMMANUEL NGESA
